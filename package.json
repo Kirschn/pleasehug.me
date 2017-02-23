@@ -1,0 +1,25 @@
+{
+  "name": "pleasehug.me",
+  "version": "1.0.0",
+  "description": "pleasehug.me source code",
+  "main": "hugcontroller.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kirschn/pleasehug.me.git"
+  },
+  "author": "Kirschn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kirschn/pleasehug.me/issues"
+  },
+  "homepage": "https://github.com/Kirschn/pleasehug.me#readme",
+  "dependencies": {
+    "cluster": "^0.7.7",
+    "express": "^4.14.1",
+    "mysql": "^2.13.0",
+    "redis": "^2.6.5"
+  }
+}
