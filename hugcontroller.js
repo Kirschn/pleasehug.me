@@ -16,7 +16,7 @@ if (cluster.isMaster) {
 } else {
 	var fs = require("fs");
 	var homepageTemplate = fs.readFileSync("homepage.html", "utf8");
-	var userTemplate = fs.readFileSync("usertemplate.html", "utf8");
+	var userTemplate = fs.readFileSync("page.html", "utf8");
 	var escape = require('escape-html');
 	var bodyParser = require('body-parser')
     var redis = require("redis");
@@ -129,7 +129,8 @@ if (cluster.isMaster) {
     			if (results[0] !== undefined) {
     				res.send(usertemplate.replace("::username::", escape(req.params.user))
     					.replace("::bgimg::", results[0].bgimg)
-    					.replace("::hugs::", redis.get(req.params.user))).end();
+    					.replace("::hugs::", redis.get(req.params.user)))
+    					.end();
     			} else {
     				res.status(404).end("not found");
     			}
