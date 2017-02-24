@@ -24,7 +24,7 @@ if (cluster.isMaster) {
     var mysql      = require('mysql');
     var sha256 = require("sha256");
     var config = fs.readFileSync("config.json", "utf8")
-    var sqlConnection = mysql.createConnection(config);
+    var sqlConnection = mysql.createConnection(JSON.parse(config));
     redisClient.on("error", function(err) {
         console.log("Redis Error: " + err);
     })
