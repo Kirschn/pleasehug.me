@@ -17,4 +17,7 @@
         })
       })
     }
-    dump();
+    setInterval(function () {
+      console.log("dumping...");
+      dump();
+    }, 5000)
