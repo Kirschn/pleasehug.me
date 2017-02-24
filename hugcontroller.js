@@ -16,7 +16,7 @@ if (cluster.isMaster) {
 } else {
 	var fs = require("fs");
 	var homepageTemplate = fs.readFileSync("homepage.html", "utf8");
-	var userTemplate = fs.readFileSync("page.html", "utf8");
+	var userTemplate = fs.readFileSync("userpage.html", "utf8");
 	var escape = require('escape-html');
 	var bodyParser = require('body-parser')
     var redis = require("redis");
@@ -58,7 +58,7 @@ if (cluster.isMaster) {
                     if (err) throw err;
                     if (result[0] !== undefined) {
                     	res.send(JSON.stringify({
-                    	    "hugs": redis.get(req.params.user)
+                    	    "hugs": redis.get(req.params.user),
                     	    "background": result[0].bgimg,
                     	    "username": result[0].username
                     	}));
@@ -127,12 +127,9 @@ if (cluster.isMaster) {
     		
     	}
     })
-    app.get('/', function(req,res) {
-    	res.send(homepageTemplate);
-    	res.end();
-    });
+    
     app.get('/:user', function(req, res) {
-    	if (req.params.user.indexof(" ") == -1) {
+    	if (req.params.user.indexOf(" ") == -1) {
     		var sql = "SELECT bgimg FROM profiles WHERE username = ?";
     		sqlConnection.query(sql, [req.params.user], function(err, results) {
     			if (err) throw err;
@@ -147,9 +144,13 @@ if (cluster.isMaster) {
     		});
     	}
     });
+    app.get('/', function(req,res) {
+    	res.send(homepageTemplate);
+    	res.end();
+    });
 
     // Bind to a port
-    app.listen(3000);
+    app.listen(3432);
     console.log('Application running!');
 
 }
