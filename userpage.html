@@ -13,22 +13,34 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script type="text/javascript">
       var username = "::username::";
-      $("#hug").click(function() {
-        $.get("/api/hug/" + username, function(data) {
+      function hug() {
+        $.get("https://pleasehug.me/api/hug/" + username, function(data) {
             $("#hugs").html(data);
         });
-      });
+      }
       function start() {
         $("#name").html(username);
         setInterval(function() {
-          $.get("/api/hugs/" + username, function(data) {
+          $.get("https://pleasehug.me/api/hugs/" + username, function(data) {
               $("#hugs").html(data);
           });
         }, 1000);
       }
     </script>
+	<style type="text/css">
+		body {
+			background: #222222 url('::bgimg::') no-repeat center center fixed; 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+		height: 100%;
+		width: 100%;
+
+		}
+	</style>
   </head>
-  <body background="::bgimg::" onload="start()">
+  <body onload="start()" >
     <div class="navbar navbar-default navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -54,7 +66,7 @@
         <div class="row">
           <div class="col-lg-12 col-centered"">
             <h1 class="text-center"><br>Please hug <span id="name"></span></h1>
-            <p class="lead text-center"><span id="hugs">::hugs::</span> hugs<br><br><button type="button" id="hug" class="btn btn-default">Hug</button></p>
+            <p class="lead text-center"><span id="hugs">::hugs::</span> hugs<br><br><button type="button" onclick="hug()" class="btn btn-default">Hug</button></p>
           </div>
         </div>
       </div>

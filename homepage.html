@@ -11,26 +11,8 @@
       <script src="../bower_components/respond/dest/respond.min.js"></script>
     <![endif]-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script type="text/javascript">
-    	$("#createaccountbtn").click(function() {
-    		$.post("https://pleasehug.me/api/createprofile", {
-    			"username": $("#username").val(),
-    			"password": $("#pwd").val(),
-    			"background": $("#bgimg").val()
-    		}, function(data) {
-    			$("#accountactionmodal").html(data).modal();
-    		})
-    	});
-    	$("#updateaccountbtn").click(function() {
-    		$.post("https://pleasehug.me/api/updateprofile", {
-    			"username": $("#username").val(),
-    			"password": $("#pwd").val(),
-    			"background": $("#bgimg").val()
-    		}, function(data) {
-    			$("#accountactionmodal").html(data).modal();
-    		})
-    	});
-    </script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    
   </head>
   <body background="">
     <div class="navbar navbar-default navbar-fixed-top">
@@ -58,8 +40,8 @@
         <div class="row">
           <div class="col-lg-6 col-centered"">
             <h1 class=""><br>Get hugged</h1>
-            <p class="lead">Create your hug profile</p><br><br>
-            <form>
+            <p class="lead">Create your profile</p><br><br>
+            
               <div class="form-group">
                 <label for="username">Username (= your URL):</label>
                 <input type="username" class="form-control" id="username">
@@ -72,14 +54,14 @@
                 <label for="bgimg"><a href="https://sharepic.moe">sharepic.moe</a> Background Image: (if you don't have one just keep this field blank, you can change it later)</label>
                 <input type="text" class="form-control" id="bgimg" placeholder="https://sharepic.moe/hue12/raw">
               </div>
-              <button class="btn btn-default" id="createaccountbtn">Create Account</button>
-              <button class="btn btn-default" id="updateaccountbtn">Update Background Image</button>
-            </form>
+              <button class="btn btn-default" onclick="createaccountbtn()">Create Account</button>
+              <button class="btn btn-default" onclick="updateaccountbtn()">Update Background Image</button>
+            
           </div>
         </div>
       </div>
 	</div>
-	<div id="actionMoadal" class="modal fade" role="dialog">
+	<div id="actionModal" class="modal fade" role="dialog">
 	  <div class="modal-dialog">
 
 	    <!-- Modal content-->
@@ -98,5 +80,27 @@
 
 	  </div>
 	</div>
+	<script type="text/javascript">
+    	function createaccountbtn() {
+    		$.post("https://pleasehug.me/api/createprofile", {
+    			"username": $("#username").val(),
+    			"password": $("#pwd").val(),
+    			"background": $("#bgimg").val()
+    		}, function(data) {
+    			$("#accountactionmodal").html(data);
+				$("#actionModal").modal();
+    		});
+    	};
+    	function updateaccountbtn() {
+    		$.post("https://pleasehug.me/api/updateprofile", {
+    			"username": $("#username").val(),
+    			"password": $("#pwd").val(),
+    			"background": $("#bgimg").val()
+    		}, function(data) {
+    			$("#accountactionmodal").html(data);
+				$("#actionModal").modal();
+    		})
+    	}
+    </script>
  </body>
 </html>
