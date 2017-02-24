@@ -25,6 +25,7 @@ if (cluster.isMaster) {
     var sha256 = require("sha256");
     var config = fs.readFileSync("config.json", "utf8")
     var sqlConnection = mysql.createConnection(JSON.parse(config));
+    var rankHugs = [];
     redisClient.on("error", function(err) {
         console.log("Redis Error: " + err);
     })
@@ -46,6 +47,7 @@ if (cluster.isMaster) {
 					if (err) throw err;
 					res.send(String(resultRed));
 					res.end();
+                    redisClient.incr("totalhugs");
 				});
                 
             } else {
@@ -76,6 +78,17 @@ if (cluster.isMaster) {
                 });
             }
         }
+    });
+    app.get('/api/stats', function (req,res) {
+        var respObj = {
+            "ranking": rankHugs
+        }
+        redisClient.get("totalhugs", function (err, totalhugs) {
+            respObj["hugs_total"] = totalhugs;
+            res.send(JSON.stringify(respObj));
+            res.end();
+
+        })
     });
     app.get('/api/hugs/:user', function (req, res) {
 		console.log("Hugs for " + req.params.user);
@@ -173,5 +186,12 @@ if (cluster.isMaster) {
     // Bind to a port
     app.listen(3432);
     console.log('Application running!');
+    setInterval(function() {
+        var topquery = "SELECT username, hugs FROM profiles ORDER BY hugs DESC LIMIT 10";
+            sqlConnection.query(topquery, function(err, res) {
+                if (err) throw err;
+                rankHugs = res;
+            });
+    }, 5000)
 
 }
