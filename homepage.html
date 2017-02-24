@@ -38,7 +38,7 @@
     <div class="container">
       <div class="page-header" id="banner">
         <div class="row">
-          <div class="col-lg-6 col-centered"">
+          <div class="col-lg-6 col-sm-12 col-md-6 col-centered">
             <h1 class=""><br>Get hugged</h1>
             <p class="lead">Create your profile</p><br><br>
             
@@ -58,6 +58,23 @@
               <button class="btn btn-default" onclick="updateaccountbtn()">Update Background Image</button>
             
           </div>
+        <div class="col-lg-6 col-sm-12 col-md-6 col-centered">
+            <h1 class=""><br><span id="totalhugs">loading</span></h1><h3> hugs given.</h3>
+            <p class="lead">Ranking:</p><br><br>
+              <table class="table table-striped">
+              <thead>
+              <tr>
+              <td>Hugs</td>
+              <td>User</td>
+              </tr>
+              </thead>
+              <tbody id="rankingtable">
+                
+              </tbody>
+              </table>
+            
+          </div>
+        </div>
         </div>
       </div>
 	</div>
@@ -101,6 +118,22 @@
 				$("#actionModal").modal();
     		})
     	}
+      function updateranking() {
+        $.get("https://pleasehug.me/api/stats", function(data) {
+          var stats = JSON.parse(data);
+          $("#totalhugs").html(data.hugs_total);
+          var buildString = "";
+          stats.ranking.forEach(function(currentRank) {
+            buildString += "<tr><td>"+currentRank.username+"</td><td>"+currentRank.hugs+"</td></tr>"
+          })
+          $("#rankingtable").html(buildString)
+        });
+
+      }
+      updateranking();
+      setInterval(function() {
+        updateranking();
+      }, 5000);
     </script>
  </body>
 </html>
