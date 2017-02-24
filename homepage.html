@@ -121,7 +121,7 @@
       function updateranking() {
         $.get("https://pleasehug.me/api/stats", function(data) {
           var stats = JSON.parse(data);
-          $("#totalhugs").html(data.hugs_total);
+          $("#totalhugs").html(stats.hugs_total);
           var buildString = "";
           stats.ranking.forEach(function(currentRank) {
             buildString += "<tr><td>"+currentRank.username+"</td><td>"+currentRank.hugs+"</td></tr>"
