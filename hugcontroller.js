@@ -23,12 +23,8 @@ if (cluster.isMaster) {
     var redisClient = redis.createClient();
     var mysql      = require('mysql');
     var sha256 = require("sha256");
-    var sqlConnection = mysql.createConnection({
-      host     : 'localhost',
-      user     : 'pleasehugme',
-      password : '',
-      database : 'pleasehugme'
-    });
+    var config = fs.readFileSync("conig.json", "utf8")
+    var sqlConnection = mysql.createConnection(config);
     redisClient.on("error", function(err) {
         console.log("Redis Error: " + err);
     })
@@ -46,7 +42,7 @@ if (cluster.isMaster) {
 		console.log("Hug for " + req.params.user);
         if (req.params.user !== undefined && req.params.user !== "") {
             if (req.params.user.indexOf(" ") == -1) {
-				redisClient.incr(req.params.user, function(err, resultRed) {
+				redisClient.incr("hugs_" + req.params.user, function(err, resultRed) {
 					if (err) throw err;
 					res.send(String(resultRed));
 					res.end();
@@ -65,7 +61,7 @@ if (cluster.isMaster) {
                 sqlConnection.query(sql, [req.params.user], function(err, result) {
                     if (err) throw err;
                     if (result[0] !== undefined) {
-						redisClient.get(req.params.user, function(err, resultHug) {
+						redisClient.get("hugs_" + req.params.user, function(err, resultHug) {
 							res.send(JSON.stringify({
                     	    "hugs": resultHug,
                     	    "background": result[0].bgimg,
@@ -85,7 +81,7 @@ if (cluster.isMaster) {
 		console.log("Hugs for " + req.params.user);
         if (req.params.user !== undefined && req.params.user !== "") {
             if (req.params.user.indexOf(" ") == -1) {
-				redisClient.get(req.params.user, function(err, respRed) {
+				redisClient.get("hugs_" + req.params.user, function(err, respRed) {
 						res.send(respRed);
 						res.end();
 				});
@@ -98,7 +94,10 @@ if (cluster.isMaster) {
 		console.log("update!");
     	if (req.body.username !== undefined && req.body.password !== undefined) {
     		if (req.body.background !== undefined) {
-    			if (req.body.background.indexOf("https://sharepic.moe/") == 0 && req.body.background.indexOf("/raw") !== -1) {
+    			if (req.body.background.indexOf("https://sharepic.moe/") == 0) {
+                    if (req.body.background.indexOf("/raw") == -1 && req.body.background.indexOf(".") == -1) {
+                        req.body.background += "/raw"
+                    }
     				// valid sharepic raw url
     				var passwordhash = sha256(req.body.password);
     				var sql = "UPDATE profiles SET bgimg = ? WHERE username = ? AND passwordhash = ?";
@@ -127,7 +126,7 @@ if (cluster.isMaster) {
 				if (results[0] == undefined) {
 					var sql = "INSERT INTO profiles SET ?";
 					var insertValues = {
-						username: req.body.username,
+						username: req.body.username.substr(0,25),
 						passwordhash: sha256(req.body.password),
 						bgimg: bg
 					};
@@ -153,7 +152,7 @@ if (cluster.isMaster) {
     		sqlConnection.query(sql, [req.params.user], function(err, results) {
     			if (err) throw err;
     			if (results[0] !== undefined) {
-					redisClient.get(req.params.user, function(err, respRed) {
+					redisClient.get("hugs_" + req.params.user, function(err, respRed) {
 						res.send(userTemplate.replace("::username::", escape(req.params.user))
     					.replace("::bgimg::", results[0].bgimg)
     					.replace("::hugs::", respRed))
