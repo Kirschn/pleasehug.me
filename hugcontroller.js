@@ -87,7 +87,7 @@ if (cluster.isMaster) {
     				var sql = "UPDATE profiles (bgimg) VALUES (?) WHERE username = ? AND passwordhash = ?";
     				sqlConnection.query(sql, [req.body.background, req.body.username, passwordhash], function(err) {
     					if (err) throw err;
-    					res.end("ok");
+    					res.end("Account updated!");
     				});
     			}
     		}
@@ -103,18 +103,28 @@ if (cluster.isMaster) {
     				bg = req.body.background;
     			}
     		}
-    		var sql = "INSERT INTO profiles SET ?";
-    		var insertValues = {
-    			username: req.body.username,
-    			passwordhash: sha256(req.body.password),
-    			bgimg: bg
-    		};
-    		sqlConnection.query(sql, insertValues, function(err) {
-    			if (err) throw err;
-    			res.write(req.body.username);
-    			res.end();
-    		});
+    		var sql = "SELECT username FROM profiles WHERE username = ?"
+    		sqlConnection.query(sql, insertValues, function(err, results) {
+				if (err) throw err;
+				if (results[0] == undefined) {
+					var sql = "INSERT INTO profiles SET ?";
+					var insertValues = {
+						username: req.body.username,
+						passwordhash: sha256(req.body.password),
+						bgimg: bg
+					};
+					sqlConnection.query(sql, insertValues, function(err) {
+						if (err) throw err;
+						res.write("Okay! Here is your URL to get hugged: <a href='https://pleasehug.me/" + escape(req.body.username) + "'>pleasehug.me/" + escape(req.body.username) + "</a>.");
+						res.end();
+					});
 
+				} else {
+					res.write("This profile already exists FeelsBadMan");
+					res.end();
+				}
+    		});
+    		
     	}
     })
     app.get('/', function(req,res) {

@@ -1,0 +1,102 @@
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Bootswatch: Superhero</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/darkly/bootstrap.min.css" media="screen">  
+    <!--[if lt IE 9]>
+      <script src="../bower_components/html5shiv/dist/html5shiv.js"></script>
+      <script src="../bower_components/respond/dest/respond.min.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript">
+    	$("#createaccountbtn").click(function() {
+    		$.post("/api/createprofile", {
+    			"username": $("#username").val(),
+    			"password": $("#pwd").val(),
+    			"background": $("#bgimg").val()
+    		}, function(data) {
+    			$("#accountactionmodal").html(data).modal();
+    		})
+    	});
+    	$("#updateaccountbtn").click(function() {
+    		$.post("/api/updateprofile", {
+    			"username": $("#username").val(),
+    			"password": $("#pwd").val(),
+    			"background": $("#bgimg").val()
+    		}, function(data) {
+    			$("#accountactionmodal").html(data).modal();
+    		})
+    	});
+    </script>
+  </head>
+  <body background="::bgimg::">
+    <div class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="/" class="navbar-brand">Please Hug Me</a>
+          
+        </div>
+        <div class="navbar-collapse collapse" id="navbar-main">
+          <ul class="nav navbar-nav">
+            
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/" target="_blank">Get hugged</a></li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container">
+      <div class="page-header" id="banner">
+        <div class="row">
+          <div class="col-lg-6 col-centered"">
+            <h1 class=""><br>Get hugged</h1>
+            <p class="lead">Create your hug profile</p><br><br>
+            <form>
+              <div class="form-group">
+                <label for="username">Username (= your URL):</label>
+                <input type="username" class="form-control" id="username">
+              </div>
+              <div class="form-group">
+                <label for="pwd">Password:</label>
+                <input type="password" class="form-control" id="pwd">
+              </div>
+              <div class="form-group">
+                <label for="bgimg"><a href="https://sharepic.moe">sharepic.moe</a> Background Image: (if you don't have one just keep this field blank, you can change it later)</label>
+                <input type="text" class="form-control" id="bgimg" placeholder="https://sharepic.moe/hue12/raw">
+              </div>
+              <button type="submit" class="btn btn-default" id="createaccountbtn">Create Account</button>
+              <button type="submit" class="btn btn-default" id="updateaccountbtn">Update Background Image</button>
+            </form>
+          </div>
+        </div>
+      </div>
+	</div>
+	<div id="actionMoadal" class="modal fade" role="dialog">
+	  <div class="modal-dialog">
+
+	    <!-- Modal content-->
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title">Account Action</h4>
+	      </div>
+	      <div class="modal-body">
+	        <p id="accountactionmodal"></p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+
+	  </div>
+	</div>
+ </body>
+</html>
