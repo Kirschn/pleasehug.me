@@ -12,7 +12,7 @@
             var sql = "UPDATE profiles SET hugs = ? WHERE username = ?";
             sqlConnection.query(sql, [hugs, currentKey.substr(5)], function (err) {
               if (err) throw err;
-            }
+            });
           })
         })
       })
