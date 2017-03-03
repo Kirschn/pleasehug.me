@@ -124,7 +124,7 @@
           $("#totalhugs").html(stats.hugs_total);
           var buildString = "";
           stats.ranking.forEach(function(currentRank) {
-            buildString += "<tr><td>"+currentRank.username+"</td><td>"+currentRank.hugs+"</td></tr>"
+            buildString += "<tr><td><a href='/"+currentRank.username+"'>"+currentRank.username+"</a></td><td>"+currentRank.hugs+"</td></tr>"
           })
           $("#rankingtable").html(buildString)
         });
